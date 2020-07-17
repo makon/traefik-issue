@@ -1,0 +1,20 @@
+[global]
+  sendAnonymousUsage = false
+
+[log]
+  level = "debug"
+
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+
+  [entryPoints.https]
+    address = ":443"
+
+[providers.file]
+  watch=true
+  filename="/etc/traefik/dynamic.toml"
+
+[providers.docker]
+  network = "proxy"
+  watch = true

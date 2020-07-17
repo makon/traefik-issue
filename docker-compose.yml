@@ -1,0 +1,39 @@
+version: "3"
+
+networks:
+  proxy:
+    external: true
+
+services:
+  traefik:
+    image: traefik:2.2.5
+    container_name: traefik
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - ./dynamic.toml:/etc/traefik/dynamic.toml
+      - ./certs:/certs
+    networks:
+        - proxy
+
+  hello-dev:
+    image: nginxdemos/hello
+    labels:
+      - "traefik.http.routers.hello-dev.rule=Host(`hello-dev.myserver.com`)"
+      - "traefik.http.routers.hello-dev.tls=true"
+      - "traefik.http.services.hello-dev.loadbalancer.server.port=80"
+    networks:
+      - proxy
+
+  hello-prod:
+    image: nginxdemos/hello
+    labels:
+      - "traefik.http.routers.hello-prod.rule=Host(`hello.myserver.com`)"
+      - "traefik.http.routers.hello-prod.tls=true"
+      - "traefik.http.routers.hello-prod.tls.options=mtls@file"
+      - "traefik.http.services.hello-prod.loadbalancer.server.port=80"
+    networks:
+      - proxy

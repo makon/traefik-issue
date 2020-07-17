@@ -1,0 +1,10 @@
+[tls]
+  [tls.options.mtls]
+    [tls.options.mtls.clientAuth]
+      caFiles = ["/certs/root-ca.crt"]
+      clientAuthType = "RequireAndVerifyClientCert"
+
+  [tls.stores.default]
+    [tls.stores.default.defaultCertificate]
+      certFile = "/certs/server.crt"
+      keyFile = "/certs/server.key"

@@ -1,0 +1,22 @@
+[req]  
+prompt=no
+distinguished_name = req_distinguished_name  
+req_extensions = v3_req
+
+# The Subject DN can be formed using X501 or RFC 4514 (see RFC 4519 for a description).
+# Its sort of a mashup. For example, RFC 4514 does not provide emailAddress.
+[req_distinguished_name]
+countryName            = "CN"           # C=
+localityName           = "L"            # L=
+organizationName       = "O"            # O=
+organizationalUnitName = "OU"           # OU=
+commonName             = "CN"           # CN=
+
+# Section req_ext is used when generating a certificate signing request. I.e., openssl req ...
+[ v3_req ]
+basicConstraints = CA:FALSE  
+keyUsage = digitalSignature, keyEncipherment  
+subjectAltName = @alt_names  
+
+[alt_names]
+DNS.1 = *.myserver.com
